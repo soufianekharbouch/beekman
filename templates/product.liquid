@@ -1,0 +1,106 @@
+<div class="product-page">
+  {% section 'product' %}
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": "{{ product.title | escape }}",
+  "url": "{{ shop.url }}{{ product.url }}",
+  {% if product.featured_image %}
+    {% assign image_size = product.featured_image.width | append: 'x' %}
+    "image": [
+      "https:{{ product.featured_image.src | img_url: image_size }}"
+    ],
+  {% endif %}
+  "description": "{{ product.description | strip_html | escape }}",
+  {% if current_variant.sku != blank %}
+    "sku": "{{ current_variant.sku }}",
+  {% endif %}
+  "brand": {
+    "@type": "Thing",
+    "name": "{{ product.vendor | escape }}"
+  },
+  {% if product.variants %}
+    "offers": [
+      {% for variant in product.variants %}
+        {
+          "@type" : "Offer",
+          "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+          "price" : "{{ variant.price | divided_by: 100.00 }}",
+          "priceCurrency" : "{{ shop.currency }}",
+          "url" : "{{ shop.url }}{{ variant.url }}",
+          "itemOffered" :
+          {
+              "@type" : "Product",
+              {% if variant.image %}
+                {% assign variant_image_size = variant.image.width | append: 'x' %}
+                "image": "http:{{ variant.image.src | img_url: variant_image_size }}",
+              {% endif %}
+              {% if variant.title != blank %}
+                "name" : "{{ variant.title | escape }}",
+              {% endif %}
+              {% if variant.sku != blank %}
+                "sku": "{{ variant.sku }}",
+              {% endif %}
+              {% if variant.weight != blank %}
+                "weight": {
+                  "@type": "QuantitativeValue",
+                  {% if variant.weight_unit != blank %}
+                    "unitCode": "{{ variant.weight_unit }}",
+                  {% endif %}
+                  "value": "{{ variant.weight | weight_with_unit: variant.weight_unit }}"
+                },
+              {% endif %}
+              "url": "{{ shop.url }}{{ variant.url }}"
+          }
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ]
+  {% endif %}
+}
+</script>
+<!-- start_pwr_initialization_code -->
+
+  <script src="//ui.powerreviews.com/stable/4.0/ui.js"></script>
+<!-- end_pwr_initialization_code -->
+
+<!-- start_review_render_code_js_section -->
+
+  <script>
+      POWERREVIEWS.display.render({
+        api_key: "e85b3292-f0e0-41d8-acc2-b7b423889c34",
+        locale: "en_US",
+        merchant_group_id: "589322278",
+        merchant_id: "1433387162",
+        page_id: "{{ product.id }}",
+        review_wrapper_url: "https://beekman1802.myshopify.com/pages/write-a-review/?pr_page_id={{ product.id }}",
+        product: {
+          name: "{{ product.title | escape | replace: "+", " " }}",
+          url: "https://beekman1802.myshopify.com{{ product.url }}",
+          image_url: "https:{{ product.featured_image | product_img_url: "large" }}",
+          description: "{{ product.description | strip_html | strip_newlines | replace: "%0A", "%20" | replace: """, "%27" | escape }}",
+          category_name: {% if product.type != '' %}"{{ product.type }}"{% else %} "Default" {% endif %},
+          upc: "{{ product.barcode }}",
+          brand_name: "{{ product.vendor }}",
+          price: "{{ product.price | money_without_currency }}",
+          in_stock: "{{ product.available }}",
+          variants: [ {% for variant in product.variants %}
+              {% assign product_name = product.title %}
+              {% if product.variants.size > 1 %}{% assign product_name = variant.title %}{% endif %}
+              {
+                name: "{{ product_name | escape | replace: "+", " " }}",
+                description: "{{ product_name | escape }}",
+                page_id_variant: "{{variant.id}}",
+                upc: "{{ variant.barcode }}"
+              }{% if forloop.last == false %}, {% endif %} {% endfor %}
+          ]},
+          components: {
+            ReviewDisplay: "pr-reviewdisplay",
+            ReviewSnippet: "pr-reviewsnippet"
+          }
+      });
+  </script>
+<!-- end_review_render_code_js_section -->
+

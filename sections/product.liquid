@@ -1,0 +1,137 @@
+{{ 'owl.carousel.min.js' | asset_url | script_tag }}
+
+<section data-section-id="{{ section.id }}" data-section-type="product" class="product-page">
+  <div class="product-top__wrap">
+    <div class="container top__container">
+      <div class="row product-header d-lg-none">
+        <div class="col-12">
+          <h1><span class="pr_name">{{ product.title }}</span>{% include 'wishl-wishlist' %}</h1>
+          <span class="subtitle">{{ product.metafields.accentuate.oz_capacity }}</span>
+          <p class="price">
+            {% if product.price_varies %}
+              From
+            {% endif %}
+            {{ product.price | money }}
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        {% include 'snippet_product_gallery' %}
+        <div class="product_shop_info col-12 col-lg-5">
+          <div class="product-header d-none d-lg-block">
+            <h1><span class="pr_name">{{ product.title }}</span>{% include 'wishl-wishlist' %}</h1>
+            <span class="subtitle">{{ product.metafields.accentuate.oz_capacity }}</span>
+          </div>
+          {% include 'snippet_reviews_preview' %}
+          {% include 'snippet_product_detail' %}
+          {% include 'snippet_checkout_section' %}
+          <div class="d-lg-none">
+            {% include 'snippet_product_icon' %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="product-content__wrap">
+
+    <div class="container">
+      {% include 'snippet_product_description' %}
+
+      {% if product.type == 'Publication' %}
+        {% include 'snippet_product_publication_testimonials' %}
+      {% endif %}
+      {% unless product.metafields.accentuate.wiw_image_mob == null or
+        product.metafields.accentuate.wiw_title == null or
+        product.metafields.accentuate.wiw_text == null or
+        product.metafields.accentuate.wiw_subtitle == null or
+        product.metafields.accentuate.wiw_subtext == null or
+        product.metafields.accentuate.wiw_image == null
+      %}
+        {% include 'snippet_product_why_it_works' %}
+      {% endunless %}
+
+    </div>
+
+    {% include 'snippet_product_statistics' %}
+
+    {% include 'snippet_product_photoquotevideo' %}
+
+    {% include 'snippet_product_faq' %}
+
+    <div class="container">
+
+      {% include 'snippet_product_artisan_info' %}
+
+      {% if product.type != 'Event' %}
+        {% if product.metafields.accentuate.other_artisan_products != blank %}
+          {% include 'snippet_artisan_products' %}
+        {% else %}
+          {% include 'snippet_product_recommended' %}
+        {% endif %}
+      {% else %}
+        {% include 'snippet_featured_events' %}
+      {% endif %}
+
+      <div class="limespot-frequently-bought-container"></div>
+
+      {% include 'snippet_reviews_list' %}
+    </div>
+  </div>
+  <br/><br/>
+  <script text="text/javascript">
+    var _learnq = _learnq || [];
+
+    var item = {
+      Name: {{ product.title|json }},
+      ProductID: {{ product.id|json }},
+      Categories: {{ product.collections|map:'title'|json }},
+      ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+      URL: "{{ shop.secure_url }}{{ product.url }}",
+      Brand: {{ product.vendor|json }},
+      Price: {{ product.price|money|json }},
+      CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+    };
+
+    _learnq.push(['track', 'Viewed Product', item]);
+    _learnq.push(['trackViewedItem', {
+      Title: item.Name,
+      ItemId: item.ProductID,
+      Categories: item.Categories,
+      ImageUrl: item.ImageURL,
+      Url: item.URL,
+      Metadata: {
+        Brand: item.Brand,
+        Price: item.Price,
+        CompareAtPrice: item.CompareAtPrice
+      }
+    }]);
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product pages",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_related_products",
+      "label": "Show related products",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_artisan_products",
+      "label": "Show artisan related products",
+      "default": true
+    },
+    {
+      "id": "related_title",
+      "type": "text",
+      "label": "Section title",
+      "default": "Recommended Routine"
+    }
+  ]
+}
+{% endschema %}
+
+{{ 'product-page.js' | asset_url | script_tag }}

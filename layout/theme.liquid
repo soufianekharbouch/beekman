@@ -1,0 +1,227 @@
+{%- comment %}<locksmith:3ff2>{% endcomment -%}
+  {%- include 'locksmith' -%}
+{%- comment %}</locksmith:3ff2>{% endcomment -%}
+
+<!doctype html>
+<html class="no-js supports-no-cookies" lang="{{ shop.locale }}">
+<head>
+  {% include 'shop-sheriff-amp' %}
+    {% include 'limespot' %}
+    <script type="text/javascript">
+      (function e() {
+          var e = document.createElement('script');
+          e.type = 'text/javascript',
+            e.async = true, e.src = '//staticw2.yotpo.com/x1sQMKFVib1i7wSiNv2wRrMyEgWN75ksizzqyBDD/widget.js';
+          var t = document.getElementsByTagName('script')[0];
+          t.parentNode.insertBefore(e, t);
+        }
+      )();
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="{{ settings.color_accent }}">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+        <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+    {%- endif -%}
+
+    {%- capture seo_title -%}
+        {{ page_title }}
+        {%- if current_tags -%}
+            {%- assign meta_tags = current_tags | join: ', ' -%} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+        {%- endif -%}
+        {%- if current_page != 1 -%}
+            &ndash; {{ 'general.meta.page' | t: page: current_page }}
+        {%- endif -%}
+        {%- assign escaped_page_title = page_title | escape -%}
+        {%- unless escaped_page_title contains shop.name -%}
+            &ndash; {{ shop.name }}
+        {%- endunless -%}
+    {%- endcapture -%}
+    <title>{{ seo_title | strip }}</title>
+
+    {%- if page_description -%}
+        {%- comment %}<locksmith:b5ed>{% endcomment -%}
+          {%- capture var %}{% render 'locksmith-variables', variable: 'transparent', hiding_scope: 'resource' %}{% endcapture %}{% if var == 'true' %}<meta name="description" content="{{ page_description | escape }}">{% endif -%}
+          {%- comment %}original: <meta name="description" content="{{ page_description | escape }}">{%- endcomment %}
+        {%- comment %}</locksmith:b5ed>{% endcomment -%}
+    {%- endif -%}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"
+          integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {% include 'social-meta-tags' %}
+    {% include 'style-tags', layout: 'theme' %}
+    {% include 'css-variables' %}
+
+    <script>
+      document.documentElement.className = document.documentElement.className.replace('no-js', '');
+
+      window.theme = {
+        strings: {
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          unavailable: {{ 'products.product.unavailable' | t | json }}
+        },
+        moneyFormat: {{ shop.money_format | json }}
+      };
+    </script>
+
+    {% include 'script-tags', layout: 'theme' %}
+
+    {{ content_for_header }}
+{%- render 'bold-common' -%}
+    {% include 'globo-megamenu-script' %}
+
+
+    <!--begin-bc-sf-filter-css-->
+    {% include 'bc-sf-filter-style' %}
+    <!--end-bc-sf-filter-css-->
+
+    {% include 'sca.freegifts' %}
+
+    <meta name="google-site-verification" content="7yyW1A_GziV5F6GvI_yrLCSYGiwxch_KSS_Wp8Q3VJ4"/>
+
+    <!-- Start of Littledata - Fix Google Analytics Script -->
+    {% include 'LittledataLayer' %}
+    <!-- End of Littledata - Fix Google Analytics Script -->
+
+<script id="livescale-embed" src="https://diva.livescale.tv/shop/embedded-app/embedded-app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+
+<body id="{{ page_title | handle }}" class="template-{{ template.name | handle }} d-flex flex-column">
+
+<a class="in-page-link visually-hidden skip-link"
+   href="#MainContent">{{ 'general.accessibility.skip_to_content' | t }}</a>
+
+{% section 'header' %}
+
+<main role="main" id="MainContent">
+    {{ content_for_layout }}
+    <limespot></limespot>
+</main>
+
+{% section 'footer' %}
+
+<script>
+  if (Storage !== undefined) {
+
+    var defaultLink = '/collections/all';
+
+      {% if template contains 'collection' %}
+    sessionStorage.collection = "{{ collection.url }}";
+      {% endif %}
+
+      {% if template contains 'cart' %}
+    if (!sessionStorage.collection) {
+      sessionStorage.collection = defaultLink;
+    }
+    document.getElementById('continue-shopping').href = sessionStorage.collection;
+      {% endif %}
+
+  }
+</script>
+
+
+<!--begin-bc-sf-filter-js-->
+{% include 'bc-sf-filter' %}
+<!--end-bc-sf-filter-js-->
+{% comment %} Init BC Action List {% endcomment %}
+<!--start-bc-al-init-->
+{% include 'bc-al-init' %}
+<!--end-bc-al-init-->
+{% comment %} Init Recently Viewed Products {% endcomment %}
+<!-- start-bc-recently-viewed-product-init -->
+{% include 'bc-recently-viewed-product-init' %}
+<!-- end-bc-recently-viewed-product-init -->
+{% comment %} Init Most Popular Widgets {% endcomment %}
+<!--start-bc-most-popular-product-init-->
+{% include 'bc-most-popular-product-init' %}
+<!--end-bc-most-popular-product-init-->
+
+{% if template contains 'customers/account' %}
+    <script src="https://app.accentuate.io/dist/proxy.js"></script>
+    <script>
+      Accentuate($('#account_details'), () => {
+        location.reload();
+      }, null);
+    </script>
+{% endif %}
+{% include 'subscription-theme-footer' %}
+
+<!-- CRITEO START-->
+{% include 'criteo-tracking' %}
+<!-- CRITEO END-->
+{% include 'ajaxify-cart' %}
+
+  <script>
+  window.addEventListener("klaviyoForms", function(e) {
+    if (e.detail.type == 'submit') {
+      gtag('event', 'form_submit', {
+        'event_category': 'Klaviyo form',
+        'event_label': e.detail.formId
+      });
+    }
+    });
+  </script>
+
+  <script src="https://a.klaviyo.com/media/js/onsite/onsite.js"></script>
+  <script>
+      var klaviyo = klaviyo || [];
+      klaviyo.init({
+          account: 'MHYvqv',
+          list: 'KyXnzH',
+          platform: 'shopify'
+      });
+      klaviyo.enable('backinstock', {
+          trigger: {
+              product_page_text: "Notify Me",
+              product_page_class: 'btn',
+              product_page_text_align: 'center',
+              product_page_margin: '0px',
+              alternate_anchor: "AddToCart",
+              replace_anchor: false
+
+          },
+          modal: {
+              headline: '{product_name}',
+              body_content: "Sorry! That item is out of stock. Sign up with your email address and we'll notify you when it's back.",
+              button_label: 'Notify me',
+              email_field_label: 'Enter your email',
+          }
+      });
+  </script>
+  <script src="https://cdn.attn.tv/beekman1802/dtag.js"></script>
+</body>
+</html>
+
+<!-- Begin Shopify-Afterpay JavaScript Snippet (v1.0.9) -->
+<script type="text/javascript">
+  // Overrides:
+  var afterpay_cart_integration_enabled = false;
+  var afterpay_product_selector = '.price__wrap';
+  // var afterpay_min = 0.04;            // As per your Afterpay contract.
+  // var afterpay_max = 2000.00;         // As per your Afterpay contract.
+  // var afterpay_cbt_enabled = false;   // As per your Afterpay contract; change to true to display Cross-Border Trade artwork (for AU/NZ).
+  // var afterpay_logo_theme = 'colour'; // Can be 'colour', 'black' or 'white'.
+  // var afterpay_cart_static_selector = '#cart-subtotal-selector';
+
+  // Non-editable fields:
+  var afterpay_shop_currency = {{ shop.currency | json }};
+  var afterpay_cart_currency = {{ cart.currency.iso_code | json }};
+  var afterpay_shop_money_format = {{ shop.money_format | json }};
+  var afterpay_shop_permanent_domain = {{ shop.permanent_domain | json }};
+  var afterpay_theme_name = {{ theme.name | json }};
+  var afterpay_product = {{ product | json }};
+  var afterpay_current_variant = {{ product.selected_or_first_available_variant | json }};
+  var afterpay_cart_total_price = {{ cart.total_price | json }};
+  var afterpay_js_snippet_version = '1.0.9';
+</script>
+<script type="text/javascript" src="https://static.afterpay.com/shopify-afterpay-javascript.js"></script>
+<!-- End Shopify-Afterpay JavaScript Snippet (v1.0.9) -->

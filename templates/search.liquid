@@ -1,0 +1,20 @@
+<div class="category-landing-content collection__wrap">
+    <div class="container">
+        <div class="row collection-featured-image__wrap no--image">
+            <div class="col-12 d-flex justify-content-end count_products_block">
+                <div class="bc-sf-filter-toolbar-item bc-sf-filter-toolbar-count">
+                    <span id="bc-sf-filter-total-product">{% include 'bc-sf-filter-skeleton', width: 1 %}</span>
+                </div>
+            </div>
+            <div class="col-12 d-flex flex-column align-items-center title_product_block">
+                <h1 class="bc-sf-search-result-header">{{ 'general.search.title' | t }}</h1>
+            </div>
+        </div>
+        <div class="row most__loved-wrap">
+            {% section 'search-template-bc-sf-filter' %}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  var ___PRIVATE_APP_URL = {{ settings.private_app_url | json }}
+</script>
